@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Da ficha à planilha | Sequência didática</title>
+<style>
+  :root { color-scheme: light; font-family: system-ui, sans-serif; color: #182738; background: #edf4f7; }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  main { width: min(100% - 2rem, 65rem); margin: 2rem auto; }
+  header { padding: 1.7rem; background: #163857; color: white; border-radius: 1rem; }
+  h1 { margin: .25rem 0; font-size: clamp(1.8rem, 5vw, 2.7rem); }
+  h2 { margin-top: 0; }
+  p { line-height: 1.5; }
+  section { margin-top: 1rem; padding: clamp(1rem, 4vw, 1.7rem); background: white; border: 1px solid #cfdee6; border-radius: 1rem; }
+  .fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 1rem; }
+  label { display: block; font-weight: 650; margin-bottom: .35rem; }
+  small { display: block; margin-top: .3rem; color: #41566a; }
+  input, select, button { font: inherit; padding: .65rem .8rem; border-radius: .5rem; }
+  input, select { width: 100%; border: 1px solid #71869a; background: white; color: inherit; }
+  button { margin-top: 1rem; border: 0; background: #174c78; color: white; cursor: pointer; font-weight: 650; }
+  #exportar { background: #09634f; }
+  #exportar:disabled { background: #e0e8e8; color: #41566a; cursor: default; }
+  :focus-visible { outline: 3px solid #a74d00; outline-offset: 3px; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 36rem; text-align: left; }
+  th, td { padding: .7rem; border-bottom: 1px solid #d1dfe6; }
+  th { background: #e8f1f6; }
+  tbody tr:nth-child(even) { background: #f6f9fb; }
+  .video-introducao { display: block; width: min(100%, 48rem); aspect-ratio: 16 / 9; border: 0; border-radius: .5rem; background: #163857; }
+  [hidden] { display: none !important; }
+  .etapas { display: flex; flex-wrap: wrap; gap: .5rem; padding: 0; list-style: none; }
+  .etapas button { margin-top: 0; background: white; color: #174c78; border: 1px solid #71869a; }
+  .etapas button[aria-current="step"] { background: #174c78; color: white; }
+  .etapas button:disabled { color: #526677; background: #e0e8e8; cursor: default; }
+  .ficha { padding: .9rem; background: #edf4f7; border-radius: .5rem; margin: 0; }
+  .ficha dt { font-weight: 650; }
+  .ficha dd { margin: 0 0 .4rem; }
+  .secundario { background: #e8f1f6; color: #174c78; }
+  .pergunta { margin-block: 1rem; }
+  #analise { margin-top: 1rem; border-top: 1px solid #cfdee6; padding-top: 1rem; }
+  #status { min-height: 1.5em; margin-bottom: 0; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>Letramento em Dados</div>
+    <h1>Da ficha à planilha</h1>
+    <p>Organize fichas de personagens, teste regras de cadastro e investigue os dados que você registrou.</p>
+  </header>
+  <section aria-labelledby="titulo-video">
+    <h2 id="titulo-video">Vídeo de introdução</h2>
+    <iframe class="video-introducao"
+      src="https://www.youtube-nocookie.com/embed/1TLM2g5_114"
+      title="Da ficha à planilha — vídeo de introdução"
+      loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+      allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    <p><a href="https://www.youtube.com/watch?v=1TLM2g5_114"
+      target="_blank" rel="noopener noreferrer">Assistir no YouTube</a></p>
+  </section>
+  <nav aria-label="Etapas da sequência">
+    <ol class="etapas">
+      <li><button type="button" data-destino="1" aria-current="step">1. Ficha do personagem</button></li>
+      <li><button type="button" data-destino="2" disabled>2. Tipos e validação</button></li>
+      <li><button type="button" data-destino="3" disabled>3. Coleta e análise</button></li>
+    </ol>
+  </nav>
+  <section data-etapa="1" aria-labelledby="titulo-fichas">
+    <h2 id="titulo-fichas" tabindex="-1">Ficha do personagem</h2>
+    <p>Compare as fichas. Cada uma descreve um personagem usando os mesmos cinco atributos.</p>
+    <div class="fields">
+      <dl class="ficha">
+        <dt>Nome completo</dt><dd>Lia da Serra</dd>
+        <dt>Idade</dt><dd>12 anos</dd>
+        <dt>Altura</dt><dd>1,52 m</dd>
+        <dt>Cor favorita</dt><dd>Verde</dd>
+        <dt>Possui pet?</dt><dd>Sim</dd>
+      </dl>
+      <dl class="ficha">
+        <dt>Nome completo</dt><dd>Caio do Vale</dd>
+        <dt>Idade</dt><dd>14 anos</dd>
+        <dt>Altura</dt><dd>1,67 m</dd>
+        <dt>Cor favorita</dt><dd>Azul</dd>
+        <dt>Possui pet?</dt><dd>Não</dd>
+      </dl>
+    </div>
+    <form id="fichas">
+      <p>Imagine uma tabela com as duas fichas. Complete as duas decisões.</p>
+      <div class="fields">
+        <div>
+          <label for="registro">Onde ficam os dados completos de Lia?</label>
+          <select id="registro" name="registro" required>
+            <option value="">Selecione</option><option value="linha">Em uma linha (registro)</option>
+            <option value="coluna">Em uma coluna (atributo)</option>
+          </select>
+        </div>
+        <div>
+          <label for="atributo">Onde ficam todas as idades?</label>
+          <select id="atributo" name="atributo" required>
+            <option value="">Selecione</option><option value="linha">Em uma linha (registro)</option>
+            <option value="coluna">Em uma coluna (atributo)</option>
+          </select>
+        </div>
+      </div>
+      <button>Conferir organização</button>
+      <p id="retorno-fichas" role="status"></p>
+    </form>
+    <div id="fichas-organizadas" hidden>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Fichas organizadas">
+        <table aria-label="Fichas organizadas em linhas e colunas">
+          <thead><tr><th scope="col">Nome completo</th><th scope="col">Idade (anos)</th><th scope="col">Altura (m)</th><th scope="col">Cor favorita</th><th scope="col">Possui pet?</th></tr></thead>
+          <tbody><tr><th scope="row">Lia da Serra</th><td>12</td><td>1,52</td><td>Verde</td><td>Sim</td></tr>
+          <tr><th scope="row">Caio do Vale</th><td>14</td><td>1,67</td><td>Azul</td><td>Não</td></tr></tbody>
+        </table>
+      </div>
+      <button type="button" data-destino="2">Ir para tipos e validação</button>
+    </div>
+  </section>
+  <section data-etapa="2" aria-labelledby="titulo-tipos" hidden>
+    <h2 id="titulo-tipos" tabindex="-1">Tipos de dados e validação</h2>
+    <p>Associe cada exemplo das fichas ao tipo de dado usado no cadastro.</p>
+    <form id="tipos">
+      <div id="campos-tipos" class="fields"></div>
+      <div class="pergunta">
+        <label for="regra-idade">Qual destes valores pode ser cadastrado como idade?</label>
+        <select id="regra-idade" name="regra-idade" required>
+          <option value="">Selecione</option><option value="12,5">12,5 anos</option>
+          <option value="121">121 anos</option><option value="12">12 anos</option>
+        </select>
+        <small>Regra do cadastro: idade inteira de 1 a 120 anos.</small>
+      </div>
+      <div class="pergunta">
+        <label for="regra-altura">Qual destes valores pode ser cadastrado como altura?</label>
+        <select id="regra-altura" name="regra-altura" required>
+          <option value="">Selecione</option><option value="1,52">1,52 m</option>
+          <option value="3,10">3,10 m</option><option value="texto">Alto</option>
+        </select>
+        <small>Regra do cadastro: número de 0,30 a 2,80 m, com até duas casas decimais.</small>
+      </div>
+      <button>Conferir respostas</button>
+      <p id="retorno-tipos" role="status"></p>
+    </form>
+    <button type="button" id="ir-cadastro" data-destino="3" hidden>Ir para coleta e análise</button>
+  </section>
+  <div data-etapa="3" hidden>
+  <section aria-labelledby="titulo-form">
+    <h2 id="titulo-form" tabindex="-1">Coleta e análise</h2>
+    <p>Cadastre pelo menos três personagens. Você pode reutilizar Lia e Caio e inventar um terceiro.</p>
+    <form id="cadastro">
+      <div class="fields">
+        <div>
+          <label for="nome">Nome completo</label>
+          <input id="nome" name="nome" required maxlength="100" autocomplete="off" aria-describedby="dica-nome">
+          <small id="dica-nome">Texto. Use um nome fictício.</small>
+        </div>
+        <div>
+          <label for="idade">Idade (anos)</label>
+          <input id="idade" name="idade" type="number" inputmode="numeric" required min="1" max="120" step="1" aria-describedby="dica-idade">
+          <small id="dica-idade">Número inteiro de 1 a 120.</small>
+        </div>
+        <div>
+          <label for="altura">Altura (m)</label>
+          <input id="altura" name="altura" type="text" inputmode="decimal" required maxlength="4" aria-describedby="dica-altura">
+          <small id="dica-altura">De 0,30 a 2,80 m. Ex.: 1,65 ou 1.65.</small>
+        </div>
+        <div>
+          <label for="cor">Cor favorita</label>
+          <select id="cor" name="cor" required>
+            <option value="">Selecione</option>
+            <option>Amarelo</option><option>Azul</option><option>Branco</option>
+            <option>Laranja</option><option>Preto</option><option>Rosa</option>
+            <option>Roxo</option><option>Verde</option><option>Vermelho</option><option>Outra</option>
+          </select>
+        </div>
+        <div>
+          <label for="pet">Possui pet?</label>
+          <select id="pet" name="pet" required>
+            <option value="">Selecione</option><option value="sim">Sim</option><option value="nao">Não</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit">Cadastrar Registro</button>
+    </form>
+  </section>
+  <section aria-labelledby="titulo-tabela">
+    <h2 id="titulo-tabela">Registros da sessão</h2>
+    <p>Os registros ficam nesta aba até ela ser fechada ou recarregada. Exporte antes de sair.</p>
+    <p id="contagem">0 registros</p>
+    <div id="analise" hidden>
+      <div class="fields">
+        <div>
+          <label for="ordem">Ordenar por</label>
+          <select id="ordem"><option value="cadastro">Ordem de cadastro</option><option value="idade">Idade, da menor à maior</option><option value="altura">Altura, da menor à maior</option></select>
+        </div>
+        <div>
+          <label for="filtro">Filtrar por pet</label>
+          <select id="filtro"><option value="todos">Todos os registros</option><option value="sim">Possui pet</option><option value="nao">Não possui pet</option></select>
+        </div>
+      </div>
+      <p id="resultado-analise" role="status"></p>
+    </div>
+    <div class="table-wrap" role="region" aria-label="Tabela de personagens" tabindex="0">
+      <table aria-labelledby="titulo-tabela">
+        <thead><tr>
+          <th scope="col">Nome completo</th><th scope="col">Idade (anos)</th><th scope="col">Altura (m)</th>
+          <th scope="col">Cor favorita</th><th scope="col">Possui pet?</th>
+        </tr></thead>
+        <tbody id="linhas"></tbody>
+      </table>
+    </div>
+    <button id="exportar" type="button" disabled>Exportar Amostragem (.csv)</button>
+    <p id="status" role="status"></p>
+    <details>
+      <summary>Desafios de análise</summary>
+      <ol>
+        <li>Ordene por idade. Quem é o personagem mais novo? A cor favorita dele permaneceu na mesma linha?</li>
+        <li>Filtre os personagens que possuem pet. Quantos aparecem? Volte a “Todos os registros” e compare.</li>
+        <li>Ordene por altura. Qual atributo serviu para decidir a ordem das linhas?</li>
+        <li>Exporte o CSV. Por que o arquivo contém todos os registros, mesmo com um filtro ativo?</li>
+      </ol>
+      <p>O CSV usa ponto e vírgula como separador e vírgula decimal. A exportação inclui todos os registros da sessão.</p>
+    </details>
+  </section>
+  </div>
+</main>
+<script>
+  const formulario = document.querySelector('#cadastro');
+  const nome = formulario.elements.namedItem('nome');
+  const altura = formulario.elements.namedItem('altura');
+  const tabela = document.querySelector('#linhas');
+  const contagem = document.querySelector('#contagem');
+  const exportar = document.querySelector('#exportar');
+  const status = document.querySelector('#status');
+  const registros = [];
+  const cabecalhos = Array.from(document.querySelectorAll('[data-etapa="3"] thead th'), th => th.textContent);
+  const decimal = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  const etapas = document.querySelectorAll('[data-etapa]');
+  const navegacao = document.querySelectorAll('nav [data-destino]');
+  const ordem = document.querySelector('#ordem');
+  const filtro = document.querySelector('#filtro');
+  const analise = document.querySelector('#analise');
+  const resultado = document.querySelector('#resultado-analise');
+  let etapaLiberada = 1;
+
+  function liberarEtapa(numero) {
+    etapaLiberada = Math.max(etapaLiberada, numero);
+    for (const botao of navegacao) {
+      botao.disabled = Number(botao.dataset.destino) > etapaLiberada;
+    }
+  }
+
+  document.querySelectorAll('[data-destino]').forEach(botao => {
+    botao.addEventListener('click', () => {
+      const destino = Number(botao.dataset.destino);
+      if (destino > etapaLiberada) return;
+      for (const etapa of etapas) etapa.hidden = Number(etapa.dataset.etapa) !== destino;
+      for (const item of navegacao) {
+        if (item === navegacao[destino - 1]) item.setAttribute('aria-current', 'step');
+        else item.removeAttribute('aria-current');
+      }
+      document.querySelector('[data-etapa="' + destino + '"] h2').focus();
+    });
+  });
+
+  document.querySelector('#fichas').addEventListener('submit', evento => {
+    evento.preventDefault();
+    const dados = new FormData(evento.currentTarget);
+    const retorno = document.querySelector('#retorno-fichas');
+    if (dados.get('registro') !== 'linha' || dados.get('atributo') !== 'coluna') {
+      retorno.textContent = 'Tente novamente. Procure uma direção para ler todos os dados de Lia e outra para comparar as idades.';
+      return;
+    }
+    retorno.textContent = 'Cada personagem ocupa uma linha. A coluna Idade reúne o mesmo atributo para os dois.';
+    document.querySelector('#fichas-organizadas').hidden = false;
+    liberarEtapa(2);
+  });
+
+  const camposTipos = [
+    ['nome-tipo', 'Nome completo · Lia da Serra', 'Texto'],
+    ['idade-tipo', 'Idade · 12', 'Inteiro'],
+    ['altura-tipo', 'Altura · 1,52', 'Decimal'],
+    ['cor-tipo', 'Cor favorita · Verde', 'Categoria'],
+    ['pet-tipo', 'Possui pet? · Sim', 'Lógico']
+  ];
+
+  for (const [id, enunciado] of camposTipos) {
+    const campo = document.createElement('div');
+    const label = document.createElement('label');
+    label.htmlFor = id;
+    label.textContent = enunciado;
+    const select = document.createElement('select');
+    select.id = select.name = id;
+    select.required = true;
+    select.add(new Option('Selecione', ''));
+    for (const tipo of ['Texto', 'Inteiro', 'Decimal', 'Categoria', 'Lógico']) {
+      select.add(new Option(tipo));
+    }
+    campo.append(label, select);
+    document.querySelector('#campos-tipos').append(campo);
+  }
+
+  document.querySelector('#tipos').addEventListener('submit', evento => {
+    evento.preventDefault();
+    const dados = new FormData(evento.currentTarget);
+    const revisar = camposTipos.filter(([id, , tipo]) => dados.get(id) !== tipo)
+      .map(([, enunciado]) => enunciado.split(' · ')[0]);
+    if (dados.get('regra-idade') !== '12') revisar.push('regra da idade');
+    if (dados.get('regra-altura') !== '1,52') revisar.push('regra da altura');
+    const retorno = document.querySelector('#retorno-tipos');
+    if (revisar.length) {
+      retorno.textContent = 'Revise: ' + revisar.join(', ') + '.';
+      return;
+    }
+    retorno.textContent = 'Cor é uma categoria escolhida em uma lista. Possui pet é lógico porque tem duas respostas possíveis. Os valores numéricos também precisam respeitar os limites do formulário.';
+    document.querySelector('#ir-cadastro').hidden = false;
+    liberarEtapa(3);
+  });
+
+  // A validação nativa verifica campos obrigatórios e os limites e o passo da idade.
+  // Estas regras complementares aceitam vírgula ou ponto e rejeitam nomes vazios.
+  nome.addEventListener('input', () => nome.setCustomValidity(''));
+  altura.addEventListener('input', () => altura.setCustomValidity(''));
+
+  formulario.addEventListener('submit', evento => {
+    evento.preventDefault();
+    const dados = new FormData(formulario);
+    const textoNome = dados.get('nome').trim();
+    const textoAltura = dados.get('altura').trim();
+    const alturaEmMetros = Number(textoAltura.replace(',', '.'));
+
+    nome.setCustomValidity(textoNome ? '' : 'Digite um nome de personagem.');
+    const alturaValida = /^\d(?:[.,]\d{1,2})?$/.test(textoAltura)
+      && alturaEmMetros >= 0.30 && alturaEmMetros <= 2.80;
+    altura.setCustomValidity(alturaValida ? '' : 'Informe uma altura de 0,30 a 2,80 m, com até duas casas decimais.');
+    if (!formulario.reportValidity()) return;
+
+    // Cada ficha vira um objeto. Texto, número e booleano são guardados no array.
+    const registro = {
+      nome: textoNome,
+      idade: Number(dados.get('idade')),
+      altura: alturaEmMetros,
+      cor: dados.get('cor'),
+      possuiPet: dados.get('pet') === 'sim'
+    };
+    registros.push(registro);
+    analise.hidden = false;
+    atualizarTabela();
+    contagem.textContent = registros.length === 1 ? '1 registro' : `${registros.length} registros`;
+    exportar.disabled = false;
+    formulario.reset();
+    nome.focus();
+    status.textContent = `Registro ${registros.length} cadastrado: ${registro.nome}.`;
+  });
+
+  function valoresDaLinha(registro) {
+    return [registro.nome, registro.idade, decimal.format(registro.altura),
+      registro.cor, registro.possuiPet ? 'Sim' : 'Não'];
+  }
+
+  // Manipulação do DOM: cria uma linha e insere os valores como texto nas células.
+  function adicionarLinha(registro) {
+    const linha = tabela.insertRow();
+    for (const valor of valoresDaLinha(registro)) {
+      linha.insertCell().textContent = valor;
+    }
+  }
+
+  // Ordenação e filtro alteram a visualização. O array original alimenta o CSV.
+  function atualizarTabela() {
+    const visiveis = registros.filter(registro =>
+      filtro.value === 'todos' || registro.possuiPet === (filtro.value === 'sim'));
+    const atributo = ordem.value;
+    if (atributo !== 'cadastro') visiveis.sort((a, b) => a[atributo] - b[atributo]);
+    tabela.replaceChildren();
+    for (const registro of visiveis) adicionarLinha(registro);
+    resultado.textContent = 'Exibindo ' + visiveis.length + ' de ' + registros.length + ' registros.';
+  }
+
+  ordem.addEventListener('change', atualizarTabela);
+  filtro.addEventListener('change', atualizarTabela);
+
+  // Aspas internas são duplicadas. Textos com início de fórmula recebem um
+  // apóstrofo para serem tratados como texto em aplicativos de planilha.
+  function formatarCelulaCsv(valor) {
+    let texto = String(valor);
+    if (/^\s*[=+@-]/.test(texto)) texto = "'" + texto;
+    return '"' + texto.replaceAll('"', '""') + '"';
+  }
+
+  // O Blob guarda o CSV em memória; a URL temporária aciona o download local.
+  exportar.addEventListener('click', () => {
+    const linhas = [cabecalhos, ...registros.map(valoresDaLinha)];
+    const csv = linhas.map(linha => linha.map(formatarCelulaCsv).join(';')).join('\r\n') + '\r\n';
+    const arquivo = new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(arquivo);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'amostragem-personagens.csv';
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10_000);
+    status.textContent = 'Download do CSV solicitado.';
+  });
+</script>
+</body>
+</html>
